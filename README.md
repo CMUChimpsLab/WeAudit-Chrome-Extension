@@ -37,3 +37,30 @@ Step 2:
 
 sudo ./discourse-setup
 ```
+
+## Editing the forum
+
+Go to https://forum.weaudit.org
+
+Sign into the admin account. The credentials are:
+```
+username: cmuweaudit
+password: cmuweaudit12345
+```
+
+The admin is setup with an email account. The credentials are:
+```
+email address username: cmuweaudit@gmail.com
+email address password: weaudit12345
+```
+
+To edit the website, go to the admin site once logged in.
+
+Shortcuts:
+
+1. [Editing a theme](https://forum.weaudit.org/admin/customize/themes) (This is used for adding and modifying existing features in the Discourse template by creating a custom template with HTML/CSS)
+2. [Restrict IP addresses for admin login](https://forum.weaudit.org/admin/logs/screened_ip_addresses)
+
+## Plans
+
+Because we own the weaudit.org domain, https://weaudit.org can be an informational page that describes the purposes of our project while https://forum.weaudit.org is our primary discussion forum.
