@@ -56,10 +56,25 @@ email address password: weaudit12345
 
 To edit the website, go to the admin site once logged in.
 
-Shortcuts:
+## Implementation
 
-1. [Editing a theme](https://forum.weaudit.org/admin/customize/themes) (This is used for adding and modifying existing features in the Discourse template by creating a custom template with HTML/CSS)
-2. [Restrict IP addresses for admin login](https://forum.weaudit.org/admin/logs/screened_ip_addresses)
+### [Editing a theme](https://forum.weaudit.org/admin/customize/themes) 
+
+This is used for adding and modifying existing features in the Discourse template by creating a custom template with HTML/CSS
+
+### [Restrict IP addresses for admin login](https://forum.weaudit.org/admin/logs/screened_ip_addresses)
+
+IP addresses for admin login have been restricted to certain ranges only accessible to CMU members. To add an IP range for admins to login, add the IP address and classify it as `Allow Admin`. Below is a list of the current allowed IP address ranges.
+
+* WiFi:
+  * CMU-SECURE: `172.26.0.0/17`
+  * CMU-DEVICE: `172.26.192.0/18`
+* Campus VPN:
+  * BORDER-GENERAL: `172.31.64.0/20`
+  * BORDER-FULL: `172.31.56.0/21`
+* Wired:
+  * `128.2.0.0/16`
+  * `128.237.0.0/16`
 
 ## Plans
 
