@@ -62,6 +62,12 @@ Note that if you choose to connect to campus VPN, you must connect to the `Full 
 
 To edit the website, go to the admin site once logged in.
 
+### Technical Support
+
+If there are any questions or difficulties regarding IP address connectivity, please direct your questions to the Help Center (it-help@andrew.cmu.edu).
+
+The Campus IP addresses were given by Mark Poepping and Daryl Hollinger.
+
 ## Implementation
 
 ### [Editing a theme](https://forum.weaudit.org/admin/customize/themes) 
