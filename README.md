@@ -54,6 +54,12 @@ email address username: cmuweaudit@gmail.com
 email address password: weaudit12345
 ```
 
+### Admin Login
+
+Admin login access is restricted to CMU users only. To login to the admin account, you can either connect to campus WiFi via CMU-SECURE or connect through the [campus VPN](https://www.cmu.edu/computing/services/endpoint/network-access/vpn/) through Cisco AnyConnect Secure Mobility Client.
+
+Note that if you choose to connect to campus VPN, you must connect to the `Full VPN` group. If you connect to the `Campus VPN` group, there will be split-tunneling, and Discourse will not be able to detect that you are connected to the VPN.
+
 To edit the website, go to the admin site once logged in.
 
 ## Implementation
