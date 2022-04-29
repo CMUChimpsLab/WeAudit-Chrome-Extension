@@ -91,3 +91,5 @@ IP addresses for admin login have been restricted to certain ranges only accessi
 ## Plans
 
 Because we own the weaudit.org domain, https://weaudit.org can be an informational page that describes the purposes of our project while https://forum.weaudit.org is our primary discussion forum.
+
+[Spreadsheet of Progress Link](https://docs.google.com/spreadsheets/d/1_fKQ28U5SxLMANW9wGegWib_JvO1uIWbCu94F2Vklzc/edit?usp=sharing)
