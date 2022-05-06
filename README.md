@@ -88,6 +88,24 @@ IP addresses for admin login have been restricted to certain ranges only accessi
   * `128.2.0.0/16`
   * `128.237.0.0/16`
 
+### Security
+
+#### Preventing User Spam for Sign-Up
+
+* ReCAPTCHA
+  * Initially, this was attempted, but there is no native ReCAPTCHA support on Discourse. Therefore, we would need to create our own plugin for ReCAPTCHA, which may be a bit hairy of an implementation detail. Thus, there were some alternatives below.
+* Google and Facebook Sign-Up
+  * Users can now sign up for new accounts on Discourse with a Google or Facebook login. Users can customize their usernames on the platform for remaining anonymous. This process is done via OAuth2.
+  * The Google Cloud Platform account and Facebook Developers account that manage these plugins are under the account name, `cmuweaudit@gmail.com`. The password is the same as before, `cmuweaudit12345`.
+
+#### Enabling Email and Mail Permissions on Discourse
+
+This procedure is needed for email sign-up, but since we are directing sign-ups to be from Google and Facebook, this procedure is no longer needed.
+
+However, if we do decide to use this procedure, we must integrate a Mail API using one of the platforms linked [here](https://github.com/discourse/discourse/blob/main/docs/INSTALL-email.md). These services will incur an additional monthly charge.
+
+
+
 ## Plans
 
 Because we own the weaudit.org domain, https://weaudit.org can be an informational page that describes the purposes of our project while https://forum.weaudit.org is our primary discussion forum.
