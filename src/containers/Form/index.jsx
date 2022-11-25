@@ -24,6 +24,17 @@ output to sheets through api
 //const api = 'https://peaceful-brook-47316.herokuapp.com/';
 const api = 'https://peaceful-brook-47316.herokuapp.com/';
 
+// For submitting audit to WeAudit website
+// TODO: Hardcoding the Api-Key and Api-Username headers for now but it's a terrible idea in production.
+// We should let user login and generate user-specific API keys on-the-fly.
+// Check out https://meta.discourse.org/t/user-api-keys-specification/48536 on how to do it.
+const WEAUDIT_BASE_URL = 'https://forum.weaudit.org';
+const WEAUDIT_HEADERS = {
+  'Api-Key': 'e7544744b0dcbb0477f8416ef245e9f1d6012053e42b8134bd54508339859612',
+  'Api-Username': 'CMUweaudit-admin',
+  'Content-Type': 'application/json',
+}
+
 const uploadImage = async (image) => {
   const apikey = 'f07a92335f3f0537617c876f39e5bb6e';
 
@@ -180,6 +191,77 @@ class Form extends Component {
         .then((result) => console.log(result))
         .catch((error) => console.log('error', error));*/
     }
+  };
+
+  composeWeAuditSubmitDataFromState = () => {
+    const title = `[Data] ${this.state.audit}`;
+
+    // Build WeAudit post text and tags from state
+    const tags = [];
+    let postText = "";
+    let imageText = "";
+    const biasTagToWeAuditTag = {
+      'Race': 'racial-bias',
+      'Religion': 'religious-bias',
+      'Gender': 'gender-bias',
+      'Age': 'age-bias'
+    }
+    this.state.questions.forEach((question) => {
+      if (question.type === 'tag') {  // bias tags
+        Object.keys(question.answer).forEach(key => {
+          if (question.answer[key] && key in biasTagToWeAuditTag) {
+            tags.push(biasTagToWeAuditTag[key]);
+          }
+        });
+      } else if (question.type === 'image') {
+        // TODO: Save the generated images to Google Drive and use the Google Drive links
+        const images = [
+          'https://forum.weaudit.org/uploads/default/original/1X/a0e59211a345eb1e3c2046694b56d048788d2ba2.jpeg',
+          'https://forum.weaudit.org/uploads/default/original/1X/1ac672a2b2fd8ce83f40687a8c76f2c7653de31c.jpeg',
+          'https://forum.weaudit.org/uploads/default/original/1X/b206f06c441d859b8ecd34cfa28246d068155b43.jpeg'
+        ]
+        images.forEach(image => {
+          imageText += `![image|380x380](${image})\n\n`;
+        });
+      } else {
+        postText += `**${question.question}**\n${question.answer}\n\n`;  // ** is for bold
+      }
+    });
+    postText += imageText;
+
+    return {
+      "title": title,
+      "raw": postText,
+      "category": "46",  // 46 is the category ID for the "Dall-E-2 forum on Weaudit"
+      "archetype": "regular",
+      "is_warning": "false",
+      "tags": tags,
+      "shared_draft": "false",
+      "draft_key": "new_topic",
+      "nested_post": "true"
+    }    
+  }
+
+  onAuditSubmit = () => {
+    const data = this.composeWeAuditSubmitDataFromState();
+    console.log(data);
+
+    fetch(`${WEAUDIT_BASE_URL}/posts.json`, {
+      method: 'POST',
+      headers: WEAUDIT_HEADERS,
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Success:', data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      })
+      .finally(() => {
+        console.log('finally');
+        window.close();
+      });
   };
 
   render() {
@@ -508,10 +590,10 @@ class Form extends Component {
                 let res = chrome.tabs.sendMessage(activeTab.id, {
                   message: 'screenshot',
                 });
-                window.close();
+                // window.close();
               }}
             >
-              <span className="e5479_23174">Submit</span>
+              <span className="e5479_23174" onClick={this.onAuditSubmit} >Submit</span>
             </div>
           </div>
           <br />
