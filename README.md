@@ -1,113 +1,151 @@
-# WeAudit
-Informational repository describing both the frontend and backend of the [WeAudit forum website](https://forum.weaudit.org).
+<img src="src/assets/img/icon-128.png" width="64"/>
 
-WeAudit was set up as a Discourse server hosted by AWS Lightsail and Docker.
-It is run on the crowdAuditsDiscourse [Lightsail instance](https://lightsail.aws.amazon.com/ls/webapp/us-east-1/instances/crowdAuditsDiscourse/connect) in the AWS Management Console on the AWS account for ChimpsLab.  
+# Chrome Extension Boilerplate with React 17 and Webpack 5
 
-The current capacity for the server is 2 GB RAM, 1 vCPU, and 60 GB SSD. The server was created on March 24, 2022, 6:07 PM. This capacity is free for the first three months (up until June 24, 2022), and it will incur a monthly charge of $9.99 subsequently.
+[![npm](https://img.shields.io/npm/v/chrome-extension-boilerplate-react)](https://www.npmjs.com/package/chrome-extension-boilerplate-react)
+[![npm-download](https://img.shields.io/npm/dw/chrome-extension-boilerplate-react)](https://www.npmjs.com/package/chrome-extension-boilerplate-react)
+[![npm](https://img.shields.io/npm/dm/chrome-extension-boilerplate-react)](https://www.npmjs.com/package/chrome-extension-boilerplate-react)
 
-The IP addresses on the server include:
+[![dependencies Status](https://david-dm.org/lxieyang/chrome-extension-boilerplate-react/status.svg)](https://david-dm.org/lxieyang/chrome-extension-boilerplate-react)
+[![devDependencies Status](https://david-dm.org/lxieyang/chrome-extension-boilerplate-react/dev-status.svg)](https://david-dm.org/lxieyang/chrome-extension-boilerplate-react?type=dev)
 
-Public IP: `54.234.130.2`
+## Announcements
 
-Private IP: `172.26.4.182`
+- **_This boilerplate adopts [Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/mv3-overview/)!_** For V2 users, please check out the [manifest-v2](https://github.com/lxieyang/chrome-extension-boilerplate-react/tree/manifest-v2) branch, or use version [3.x](https://www.npmjs.com/package/chrome-extension-boilerplate-react/v/3.3.0).
+  - Check out the [Manifest V3 Migration Guide](https://developer.chrome.com/docs/extensions/mv3/intro/mv3-migration/).
+- Recently added [devtools](https://developer.chrome.com/docs/extensions/mv3/devtools/) Support! Thanks [GeekaholicLin](https://github.com/lxieyang/chrome-extension-boilerplate-react/issues/17)!
+- Recently updated from **[React](https://reactjs.org)** ~~16~~ to **17**!
+- Recently updated from **[Webpack Dev Server](https://webpack.js.org/configuration/dev-server/)** ~~3.x~~ to **4.x** and **[Webpack](https://webpack.js.org/)** ~~4~~ to **5**!
+- Recently added [TypeScript](https://www.typescriptlang.org/) Support!
 
-Public IPv6: `2600:1f18:251:1e00:d475:3d56:4dd3:ad7a`
+## Features
 
-The server is run under Ubuntu 20.04. SSH commands can be issued online through [here](https://lightsail.aws.amazon.com/ls/remote/us-east-1/instances/crowdAuditsDiscourse/terminal?protocol=ssh).
+This is a basic Chrome Extensions boilerplate to help you write modular and modern Javascript code, load CSS easily and [automatic reload the browser on code changes](https://webpack.github.io/docs/webpack-dev-server.html#automatic-refresh).
 
-## Initial Setup:
+This boilerplate is updated with:
 
-Do not intend to replicate this setup. This is for informational purposes only to describe how the server was instantiated. In the SSH terminal for AWS Lightsail, type the following commands:
+- [Chrome Extension Manifest V3](https://developer.chrome.com/docs/extensions/mv3/intro/mv3-overview/)
+- [React 17](https://reactjs.org)
+- [Webpack 5](https://webpack.js.org/)
+- [Webpack Dev Server 4](https://webpack.js.org/configuration/dev-server/)
+- [React Hot Loader](https://github.com/gaearon/react-hot-loader)
+- [eslint-config-react-app](https://www.npmjs.com/package/eslint-config-react-app)
+- [Prettier](https://prettier.io/)
+- [TypeScript](https://www.typescriptlang.org/)
+
+This boilerplate is heavily inspired by and adapted from [https://github.com/samuelsimoes/chrome-extension-webpack-boilerplate](https://github.com/samuelsimoes/chrome-extension-webpack-boilerplate), with additional support for React 17 features, Webpack 5, and Webpack Dev Server 4.
+
+Please open up an issue to nudge me to keep the npm packages up-to-date. FYI, it takes time to make different packages with different versions work together nicely.
+
+## Installing and Running
+
+### Procedures:
+
+1. Check if your [Node.js](https://nodejs.org/) version is >= **14**.
+2. Clone this repository.
+3. Change the package's `name`, `description`, and `repository` fields in `package.json`.
+4. Change the name of your extension on `src/manifest.json`.
+5. Run `npm install` to install the dependencies.
+6. Run `npm start`
+7. Load your extension on Chrome following:
+   1. Access `chrome://extensions/`
+   2. Check `Developer mode`
+   3. Click on `Load unpacked extension`
+   4. Select the `build` folder.
+8. Happy hacking.
+
+## Structure
+
+All your extension's code must be placed in the `src` folder.
+
+The boilerplate is already prepared to have a popup, an options page, a background page, and a new tab page (which replaces the new tab page of your browser). But feel free to customize these.
+
+## TypeScript
+
+This boilerplate now supports TypeScript! The `Options` Page is implemented using TypeScript. Please refer to `src/pages/Options/` for example usages.
+
+## Webpack auto-reload and HRM
+
+To make your workflow much more efficient this boilerplate uses the [webpack server](https://webpack.github.io/docs/webpack-dev-server.html) to development (started with `npm start`) with auto reload feature that reloads the browser automatically every time that you save some file in your editor.
+
+You can run the dev mode on other port if you want. Just specify the env var `port` like this:
 
 ```
-Step 0:
-
-sudo apt update 
-
-sudo apt upgrade -y 
-
-Step 1:
-
-sudo git clone https://github.com/discourse/discourse_docker.git /var/discourse
-cd /var/discourse
-
-
-Step 2:
-
-sudo ./discourse-setup
+$ PORT=6002 npm run start
 ```
 
-## Editing the forum
+## Content Scripts
 
-Go to https://forum.weaudit.org
+Although this boilerplate uses the webpack dev server, it's also prepared to write all your bundles files on the disk at every code change, so you can point, on your extension manifest, to your bundles that you want to use as [content scripts](https://developer.chrome.com/extensions/content_scripts), but you need to exclude these entry points from hot reloading [(why?)](https://github.com/samuelsimoes/chrome-extension-webpack-boilerplate/issues/4#issuecomment-261788690). To do so you need to expose which entry points are content scripts on the `webpack.config.js` using the `chromeExtensionBoilerplate -> notHotReload` config. Look the example below.
 
-Sign into the admin account. The credentials are:
+Let's say that you want use the `myContentScript` entry point as content script, so on your `webpack.config.js` you will configure the entry point and exclude it from hot reloading, like this:
+
+```js
+{
+  …
+  entry: {
+    myContentScript: "./src/js/myContentScript.js"
+  },
+  chromeExtensionBoilerplate: {
+    notHotReload: ["myContentScript"]
+  }
+  …
+}
 ```
-username: cmuweaudit
-password: cmuweaudit12345
+
+and on your `src/manifest.json`:
+
+```json
+{
+  "content_scripts": [
+    {
+      "matches": ["https://www.google.com/*"],
+      "js": ["myContentScript.bundle.js"]
+    }
+  ]
+}
 ```
 
-The admin is setup with an email account. The credentials are:
+## Intelligent Code Completion
+
+Thanks to [@hudidit](https://github.com/lxieyang/chrome-extension-boilerplate-react/issues/4)'s kind suggestions, this boilerplate supports chrome-specific intelligent code completion using [@types/chrome](https://www.npmjs.com/package/@types/chrome).
+
+## Packing
+
+After the development of your extension run the command
+
 ```
-email address username: cmuweaudit@gmail.com
-email address password: weaudit12345
+$ NODE_ENV=production npm run build
 ```
 
-### Admin Login
+Now, the content of `build` folder will be the extension ready to be submitted to the Chrome Web Store. Just take a look at the [official guide](https://developer.chrome.com/webstore/publish) to more infos about publishing.
 
-Admin login access is restricted to CMU users only. To login to the admin account, you can either connect to campus WiFi via CMU-SECURE or connect through the [campus VPN](https://www.cmu.edu/computing/services/endpoint/network-access/vpn/) through Cisco AnyConnect Secure Mobility Client.
+## Secrets
 
-Note that if you choose to connect to campus VPN, you must connect to the `Full VPN` group. If you connect to the `Campus VPN` group, there will be split-tunneling, and Discourse will not be able to detect that you are connected to the VPN.
+If you are developing an extension that talks with some API you probably are using different keys for testing and production. Is a good practice you not commit your secret keys and expose to anyone that have access to the repository.
 
-To edit the website, go to the admin site once logged in.
+To this task this boilerplate import the file `./secrets.<THE-NODE_ENV>.js` on your modules through the module named as `secrets`, so you can do things like this:
 
-### Technical Support
+_./secrets.development.js_
 
-If there are any questions or difficulties regarding IP address connectivity, please direct your questions to the Help Center (it-help@andrew.cmu.edu).
+```js
+export default { key: '123' };
+```
 
-The Campus IP addresses were given by Mark Poepping and Daryl Hollinger.
+_./src/popup.js_
 
-## Implementation
+```js
+import secrets from 'secrets';
+ApiCall({ key: secrets.key });
+```
 
-### [Editing a theme](https://forum.weaudit.org/admin/customize/themes) 
+:point_right: The files with name `secrets.*.js` already are ignored on the repository.
 
-This is used for adding and modifying existing features in the Discourse template by creating a custom template with HTML/CSS
+## Resources:
 
-### [Restrict IP addresses for admin login](https://forum.weaudit.org/admin/logs/screened_ip_addresses)
+- [Webpack documentation](https://webpack.js.org/concepts/)
+- [Chrome Extension documentation](https://developer.chrome.com/extensions/getstarted)
 
-IP addresses for admin login have been restricted to certain ranges only accessible to CMU members. To add an IP range for admins to login, add the IP address and classify it as `Allow Admin`. Below is a list of the current allowed IP address ranges.
+---
 
-* WiFi:
-  * CMU-SECURE: `172.26.0.0/17`
-  * CMU-DEVICE: `172.26.192.0/18`
-* Campus VPN:
-  * BORDER-GENERAL: `172.31.64.0/20`
-  * BORDER-FULL: `172.31.56.0/21`
-* Wired:
-  * `128.2.0.0/16`
-  * `128.237.0.0/16`
-
-### Security
-
-#### Preventing User Spam for Sign-Up
-
-* ReCAPTCHA
-  * Initially, this was attempted, but there is no native ReCAPTCHA support on Discourse. Therefore, we would need to create our own plugin for ReCAPTCHA, which may be a bit hairy of an implementation detail. Thus, there were some alternatives below.
-* Google and Facebook Sign-Up
-  * Users can now sign up for new accounts on Discourse with a Google or Facebook login. Users can customize their usernames on the platform for remaining anonymous. This process is done via OAuth2.
-  * The Google Cloud Platform account and Facebook Developers account that manage these plugins are under the account name, `cmuweaudit@gmail.com`. The password is the same as before, `cmuweaudit12345`.
-
-#### Enabling Email and Mail Permissions on Discourse
-
-This procedure is needed for email sign-up, but since we are directing sign-ups to be from Google and Facebook, this procedure is no longer needed.
-
-However, if we do decide to use this procedure, we must integrate a Mail API using one of the platforms linked [here](https://github.com/discourse/discourse/blob/main/docs/INSTALL-email.md). These services will incur an additional monthly charge.
-
-
-
-## Plans
-
-Because we own the weaudit.org domain, https://weaudit.org can be an informational page that describes the purposes of our project while https://forum.weaudit.org is our primary discussion forum.
-
-[Spreadsheet of Progress Link](https://docs.google.com/spreadsheets/d/1_fKQ28U5SxLMANW9wGegWib_JvO1uIWbCu94F2Vklzc/edit?usp=sharing)
+Michael Xieyang Liu | [Website](https://lxieyang.github.io)
