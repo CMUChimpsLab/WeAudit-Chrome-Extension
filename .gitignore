@@ -20,3 +20,4 @@
 # secrets
 secrets.*.js
 /heroku-server/.env
+/heroku-server/node_modules
