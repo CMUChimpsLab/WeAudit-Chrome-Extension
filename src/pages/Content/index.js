@@ -133,6 +133,16 @@ function App() {
 
 render(<App />, app);*/
 
+function imageURL(img){
+  var c = document.createElement("canvas");
+var ctx = c.getContext("2d");
+
+c.width = img.naturalWidth;     // update canvas size to match image
+c.height = img.naturalHeight;
+ctx.drawImage(img, 0, 0);       // draw in image
+return c.toDataURL('image/jpeg', 1);
+}
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log('received', request);
   //console.log(document.getElementById('app'));
@@ -150,10 +160,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     let arr = document.getElementsByClassName('generated-image');
     arr = [...arr];
     arr = arr.filter((x) => x.parentElement.className !== 'hist-gen-img');
-    let urls = arr.map((x) => x.getElementsByTagName('img')[0].src);
+    let urls = arr.map((x) => imageURL(x.getElementsByTagName('img')[0]));
     console.log([prompt, urls]);
     sendResponse([prompt, urls]);
   }
+
 
   if (request.message === 'dalle connection') {
     //get first
@@ -162,14 +173,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (x) {
       let prompt = x.textContent.slice(1, -1);
       let urls = [
-        x.parentElement.parentElement.firstChild.firstChild.firstChild.src,
+        imageURL(x.parentElement.parentElement.firstChild.firstChild.firstChild),
       ];
       sendResponse([prompt, urls]);
     } else {
       let prompt = document.getElementsByClassName('image-prompt-overlay')[0]
         .firstChild.textContent;
       let urls = [
-        document.getElementsByClassName('generated-image')[0].firstChild.src,
+        imageURL(document.getElementsByClassName('generated-image')[0].firstChild),
       ];
       sendResponse([prompt, urls]);
     }

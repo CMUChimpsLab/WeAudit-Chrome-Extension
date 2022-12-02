@@ -4,25 +4,8 @@ import Header from '../../components/Header';
 import TagInput from '../../components/TagInput';
 
 const radioInput = ['None', 'Low', 'Medium', 'High'];
-
-//curl --location --request POST "https://api.imgbb.com/1/upload?expiration=600&key=f07a92335f3f0537617c876f39e5bb6e" --form "image=R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-
-/*
-api for question types
-content request =>
-document.getElementsByClassName('image-prompt-input')[0].value
-
-var arr = document.getElementsByClassName("generated-image")
-arr = [...arr] 
-arr = arr.filter(x => x.parentElement.className !== 'hist-gen-img')
-arr.map(x => x.getElementsByTagName('img')[0].src)
-
-remove take screenshot
-output to sheets through api
-*/
-
-//const api = 'https://peaceful-brook-47316.herokuapp.com/';
-const api = 'https://peaceful-brook-47316.herokuapp.com/';
+const local = false;
+const api = local?'http://localhost:5000/':'https://peaceful-brook-47316.herokuapp.com/';
 
 // For submitting audit to WeAudit website
 // TODO: Hardcoding the Api-Key and Api-Username headers for now but it's a terrible idea in production.
@@ -127,7 +110,7 @@ class Form extends Component {
       return filtered.join(', ');
     };
     if (!prevState.submit && this.state.submit) {
-      let arr = [this.state.audit];
+      /*let arr = [this.state.audit];
       for (let i in this.state.questions) {
         let obj = this.state.questions[i];
         if (obj.type === 'tag') {
@@ -153,47 +136,13 @@ class Form extends Component {
       fetch(api + 'append', requestOptions)
         .then((response) => response.text())
         .then((result) => console.log(result))
-        .catch((error) => console.log('error', error));
-      /*let imageURL = uploadImage(this.state.questions[3].image);
-      var myHeaders = new Headers();
-      myHeaders.append(
-        'Cookie',
-        'COMPASS=spreadsheet_forms=CjIACWuJV6oMhbTB2f89AG-rUPCDdZhXM9v6sXn6glHKHdBE7zT15-bUJW6HDAzIUS0OuBDmr6KWBho0AAlriVd6uv_kIxNnGPZUF8fj8rEe-brA-1kTXcOtxF4JarBmA1pkX3_mIej7Q7RgGuBf3w==; S=spreadsheet_forms=WkXIjlPDQWAhtJQBWPi0uVu8T3pEjTqDm44MhbTHCMs; NID=511=AQ95EzWJK0kSi0pDRPUGjGRSulG4fMqajQRnZx8NP9BzWFnUHtBT_wZ9sBsfkj031D7M6qfsdLlqY4aIP9qxfaXoioDLHdLP37ZVSBmEptSagvMAdsCNugcPxPmqS39NWtnQYWTelkHKQUGbcTxmNyfwnWUi75-ysb3R58bnWic'
-      );
-
-      var urlencoded = new URLSearchParams();
-
-      let requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: urlencoded,
-        redirect: 'follow',
-      };
-
-      const trueVals = (obj) => {
-        var keys = Object.keys(obj);
-
-        var filtered = keys.filter(function (key) {
-          return obj[key];
-        });
-        return filtered.join(', ');
-      };
-
-      fetch(
-        `https://docs.google.com/forms/u/0/d/e/1FAIpQLSe-DxqET6mO6DpRSqCmbfaeA2y9v0wNOTyuh-aEaU1OY2h8IQ/formResponse?entry.621496508=${trueVals(
-          this.state.questions[1].answer
-        )}&entry.1074554267=${this.state.questions[2].answer}&entry.366340186=${
-          this.state.questions[0].answer
-        }&entry.145596681=${imageURL}`,
-        requestOptions
-      )
-        .then((response) => response.text())
-        .then((result) => console.log(result))
         .catch((error) => console.log('error', error));*/
+      console.log("onAuditSubmit");
+      this.onAuditSubmit();
     }
   };
 
-  composeWeAuditSubmitDataFromState = () => {
+  composeWeAuditSubmitDataFromState = images => {
     const title = `[Data] ${this.state.audit}`;
 
     // Build WeAudit post text and tags from state
@@ -214,12 +163,6 @@ class Form extends Component {
           }
         });
       } else if (question.type === 'image') {
-        // TODO: Save the generated images to Google Drive and use the Google Drive links
-        const images = [
-          'https://forum.weaudit.org/uploads/default/original/1X/a0e59211a345eb1e3c2046694b56d048788d2ba2.jpeg',
-          'https://forum.weaudit.org/uploads/default/original/1X/1ac672a2b2fd8ce83f40687a8c76f2c7653de31c.jpeg',
-          'https://forum.weaudit.org/uploads/default/original/1X/b206f06c441d859b8ecd34cfa28246d068155b43.jpeg'
-        ]
         images.forEach(image => {
           imageText += `![image|380x380](${image})\n\n`;
         });
@@ -242,26 +185,78 @@ class Form extends Component {
     }    
   }
 
-  onAuditSubmit = () => {
-    const data = this.composeWeAuditSubmitDataFromState();
-    console.log(data);
+  onAuditSubmit = async () => {
+    //todo loading screen while submitting since it takes some time
+    function dataURItoBlob(dataURI) {
+      // convert base64/URLEncoded data component to raw binary data held in a string
+      var byteString;
+      if (dataURI.split(',')[0].indexOf('base64') >= 0)
+          byteString = atob(dataURI.split(',')[1]);
+      else
+          byteString = unescape(dataURI.split(',')[1]);
+  
+      // separate out the mime component
+      var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+  
+      // write the bytes of the string to a typed array
+      var ia = new Uint8Array(byteString.length);
+      for (var i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
+      }
+  
+      return new Blob([ia], {type:mimeString});
+  }
+    let arr = [];
+    for (let i in this.state.questions) {
+      let obj = this.state.questions[i];
+      console.log(obj);
+      if (obj.type === 'image') {
+        for (let j in obj.answer) {
+          let url = obj.answer[j];
+          arr.push(url);
+        }
+      }
+    }
+    console.log(arr);
+    const uploadApi = api+'image';
+    let gdrive_links = [];
+    for(let i in arr){
+      var formdata = new FormData();
+      formdata.append('image', dataURItoBlob(arr[i]));
+      formdata.append('name', this.state.audit+" "+i+" "+String(new Date()).substring(4,24));
+      var requestOptions = {
+        method: 'POST',
+        body: formdata,
+        redirect: 'follow',
+      };
 
-    fetch(`${WEAUDIT_BASE_URL}/posts.json`, {
+      let res = await fetch(
+        uploadApi,
+        requestOptions
+      );
+      console.log(res);
+      let res_json = await res.json();
+      console.log(res_json);
+      let linkSplit = res_json.link.split("/");
+      linkSplit[3]="uc?export=view&id="+linkSplit[5];
+      linkSplit.slice(0,4).join("/");
+      gdrive_links.push(linkSplit.slice(0,4).join("/"));
+    }
+    console.log(gdrive_links);
+    const data = this.composeWeAuditSubmitDataFromState(gdrive_links);
+    formdata = new FormData();
+    formdata.append('values', JSON.stringify(data));
+
+    requestOptions = {
       method: 'POST',
-      headers: WEAUDIT_HEADERS,
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Success:', data);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      })
-      .finally(() => {
-        console.log('finally');
-        window.close();
-      });
+      body: formdata,
+      redirect: 'follow',
+    };
+
+    const discourseApi = api + 'post-discourse';
+    console.log(requestOptions);
+    let res = fetch(discourseApi, requestOptions);
+    console.log(res);
   };
 
   render() {
@@ -581,19 +576,19 @@ class Form extends Component {
               className="e5479_23173"
               style={{}}
               onClick={async () => {
-                //this.setState({ submit: true });
-                let tabs = await chrome.tabs.query({
+                this.setState({ submit: true });
+                /*let tabs = await chrome.tabs.query({
                   currentWindow: true,
                   active: true,
                 });
                 var activeTab = tabs[0];
                 let res = chrome.tabs.sendMessage(activeTab.id, {
                   message: 'screenshot',
-                });
+                });*/
                 // window.close();
               }}
             >
-              <span className="e5479_23174" onClick={this.onAuditSubmit} >Submit</span>
+              <span className="e5479_23174" >Submit</span>
             </div>
           </div>
           <br />
