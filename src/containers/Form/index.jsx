@@ -11,36 +11,6 @@ const api = local?'http://localhost:5000/':'https://peaceful-brook-47316.herokua
 // TODO: Hardcoding the Api-Key and Api-Username headers for now but it's a terrible idea in production.
 // We should let user login and generate user-specific API keys on-the-fly.
 // Check out https://meta.discourse.org/t/user-api-keys-specification/48536 on how to do it.
-const WEAUDIT_BASE_URL = 'https://forum.weaudit.org';
-const WEAUDIT_HEADERS = {
-  'Api-Key': 'e7544744b0dcbb0477f8416ef245e9f1d6012053e42b8134bd54508339859612',
-  'Api-Username': 'CMUweaudit-admin',
-  'Content-Type': 'application/json',
-}
-
-const uploadImage = async (image) => {
-  const apikey = 'f07a92335f3f0537617c876f39e5bb6e';
-
-  var formdata = new FormData();
-  function renameFile(file, newName) {
-    var blob = file.slice(0, file.size, file.type);
-    return new File([blob], newName, { type: file.type });
-  }
-  formdata.append('image', renameFile(image, 'newName'));
-  var requestOptions = {
-    method: 'POST',
-    body: formdata,
-    redirect: 'follow',
-  };
-
-  let res = await fetch(
-    `https://api.imgbb.com/1/upload?expiration=600&key=${apikey}`,
-    requestOptions
-  );
-
-  res = await res.text();
-  return JSON.parse(res)['data']['url'];
-};
 
 class Form extends Component {
   state = {
